@@ -3,14 +3,18 @@ import tensorflow as tf
 # Define parameters
 learning_rate = 0.004
 num_epochs = 3000
-N = 6  # Number of data
-width = 4  # Data width
-inputs = [[0, 0, 0, 1], 
-          [0, 0, 1, 0],
-          [0, 1, 0, 0],
-          [1, 0, 0, 0],
-          [1, 0, 1, 0],
-          [1, 0, 1, 1]]
+N = 1  # Number of data
+width = 5  # Data width
+alphabet = 'abcdefghijklmnopqrstuvwxyz'
+inputs2 = raw_input('Enter character here: ')
+inputs2 = [[alphabet.find(inputs2) + 1]]
+#inputs = []
+#for i in range(26):
+#    inputs.append([i + 1])
+inputs = []
+for i in range(5):
+    inputs.append(inputs2[0][0] % 2)
+    inputs2[0][0] = inputs2[0][0] / 2
 
 outputs = [0.5,
            0.3,
