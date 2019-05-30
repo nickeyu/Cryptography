@@ -64,6 +64,8 @@ with tf.Session() as sess:
           )
       total_loss += out_loss
       print("Entry {}: {:0.4f} (Expected: {:0.4f})".format(i, out, outputs[i]))
+    weights = sess.run(W)
       
     print("Total loss: {:0.4f}".format(total_loss))
   
+    print(weights)
