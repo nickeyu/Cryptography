@@ -3,51 +3,42 @@ import tensorflow as tf
 # Define parameters
 learning_rate = 0.004
 num_epochs = 3000
-num_hidden_nodes = 20
-N = 5  # Number of data
+N = 2  # Number of data
 width = 5  # Data width
-alphabet = 'abcdefghijklmnopqrstuvwxyz'
-inputs2 = raw_input('Enter character here: ')
-inputs2 = [[alphabet.find(inputs2) + 1]]
-#inputs = []
-#for i in range(26):
-#    inputs.append([i + 1])
-inputs = []
-for i in range(5):
-    inputs.append(inputs2[0][0] % 2)
-    inputs2[0][0] = inputs2[0][0] / 2
+inputs = [[0, 0, 0, 1], 
+          [0, 0, 1, 0],
+          [0, 1, 0, 0],
+          [1, 0, 0, 0],
+          [1, 0, 1, 0],
+          [1, 0, 1, 1]]
+inputs = raw_input("enter character: ")
+if(inputs == "z"):
+    inputs = [[0, 0, 0, 1, 0],
+              [0, 0, 0, 0, 1]]
 
-for i in range(4):
-    inputs2 = raw_input('Enter character here: ')
-    inputs2 = [[alphabet.find(inputs2) + 1]]
-    inputs.append(inputs2[0][0] % 2)
-    inputs2[0][0] = inputs2[0][0] / 2
-
-outputs = [0.1,
+outputs = [0.5,
            0.3,
            0.1,
            0.8,
            0.3,
            -0.2]
+#outputs = [[0, 0, 0, 1],
+#           [0, 1, 0, 0]]
+#outputs = [[1.0 / 26.0],
+#           [26.0 / 26.0]]
+outputs = [1.0 / 26.0,
+           2.0 / 26.0]
 
 # Build the graph
 tf.reset_default_graph()
 X = tf.placeholder(dtype=tf.float32)
-#X = tf.placeholder(shape=(5, 5), dtype=tf.float32)
 
 W = tf.Variable(
-    tf.random_normal(shape=[width, num_hidden_nodes],
+    tf.random_normal(shape=[width, width],
                      mean=0.5, stddev=1.0, dtype=tf.float32
                      ),
     dtype=tf.float32
     )
-
-W2 = tf.Variable(
-     tf.random_normal(shape=[num_hidden_nodes, width],
-                      mean=0.5, stddev=1.0, dtype=tf.float32
-                      ),
-     dtype=tf.float32
-     )
 
 B = tf.Variable(
     tf.zeros(shape=[width, 1], dtype=tf.float32),
@@ -78,10 +69,9 @@ with tf.Session() as sess:
           feed_dict={X: inputs[i], Y: outputs[i]}
           )
       total_loss += out_loss
-      print("Entry {}: {:0.4f} (Expected: {:0.4f})".format(i, out, outputs[i]))
-    weights = sess.run(W)
-    weights2 = sess.run(W2)  
+      print("Entry {}:  (Expected: ".format(i))
+      print(out)
+      print(outputs[i])
+      weights = sess.run(W) 
     print("Total loss: {:0.4f}".format(total_loss))
-  
   print(weights)
-  print(weights2)
