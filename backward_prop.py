@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-def Backward_Propogation(inputs, outputs, N, width):
+def Backward_Propagation(inputs, outputs, N, width):
     # Define parameters
     learning_rate = 0.004
     num_epochs = 3000
@@ -53,5 +53,5 @@ def Backward_Propogation(inputs, outputs, N, width):
             print("Total loss: {:0.4f}".format(total_loss))
         print(labels)
 
-    return weights
+    return weights, labels
 
