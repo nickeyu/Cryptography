@@ -26,7 +26,7 @@ def main():
     back_weights, labels = backward_prop.Backward_Propagation(inputs, outputs, N, width)
     print(back_weights)
 
-    forward_prop.Forward_Propagation(inputs, outputs, N, width, back_weights, labels)
+    forward_prop.Forward_Propagation(inputs, N, width, back_weights, labels)
 
     #call backward_prop - input is alphabet of strings; return weights (encode) 
     #call forward_prop function - returns output (encode)

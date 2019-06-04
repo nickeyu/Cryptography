@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-def Forward_Propagation(inputs, outputs, N, width, W, B):
+def Forward_Propagation(inputs, N, width, W, B):
   # Build the graph
   tf.reset_default_graph()
   X = tf.placeholder(dtype=tf.float32)
