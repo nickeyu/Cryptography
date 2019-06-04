@@ -5,40 +5,19 @@ learning_rate = 0.004
 num_epochs = 3000
 N = 26  # Number of data
 width = 5  # Data width
-inputs = [[0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 1],
-          [0, 0, 0, 1, 0],
-          [0, 0, 0, 1, 1],
-          [0, 0, 1, 0, 0],
-          [0, 0, 1, 0, 1],
-          [0, 0, 1, 1, 0],
-          [0, 0, 1, 1, 1],
-          [0, 1, 0, 0, 0],
-          [0, 1, 0, 0, 1],
-          [0, 1, 0, 1, 0],
-          [0, 1, 0, 1, 1],
-          [0, 1, 1, 0, 0],
-          [0, 1, 1, 0, 1],
-          [0, 1, 1, 1, 0],
-          [0, 1, 1, 1, 1],
-          [1, 0, 0, 0, 0],
-          [1, 0, 0, 0, 1],
-          [1, 0, 0, 1, 0],
-          [1, 0, 0, 1, 1],
-          [1, 0, 1, 0, 0],
-          [1, 0, 1, 0, 1],
-          [1, 0, 1, 1, 0],
-          [1, 0, 1, 1, 1],
-          [1, 1, 0, 0, 0],
-          [1, 1, 0, 0, 1]]
-
-#outputs = [[0, 0, 0, 1],
-#           [0, 1, 0, 0]]
-#outputs = [[1.0 / 26.0],
-#           [26.0 / 26.0]]
-outputs = []
+inputs = []
 for i in range(N):
-    outputs.append((i + 1) / float(N))
+    temp = []
+    curVal = i
+    for j in range(width):
+        temp.append(curVal % 2)
+        curVal = curVal / 2
+    temp.reverse()
+    inputs.append(temp)
+
+outputs = []
+for i in range(1, N + 1):
+    outputs.append(i / float(N))
 
 # Build the graph
 tf.reset_default_graph()
@@ -88,4 +67,5 @@ with tf.Session() as sess:
     print("Total loss: {:0.4f}".format(total_loss))
   print(weights)
   print(labels)
+
 
