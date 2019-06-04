@@ -55,25 +55,3 @@ def Backward_Propogation(inputs, outputs, N, width):
 
     return weights
 
-
-def main():
-    N = 26  # Number of data
-    width = 5  # Data width
-    inputs = []
-    for i in range(N):
-        temp = []
-        curVal = i
-        for j in range(width):
-            temp.append(curVal % 2)
-            curVal = curVal / 2
-        temp.reverse()
-        inputs.append(temp)
-
-    outputs = []
-    for i in range(1, N + 1):
-        outputs.append(i / float(N))
-    outputs.reverse()
-    back_weights = Backward_Propogation(inputs, outputs, N, width)
-    print(back_weights)
-
-main()
