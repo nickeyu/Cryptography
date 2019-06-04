@@ -22,7 +22,8 @@ def main():
     for i in range(1, N + 1):
         outputs.append(i / float(N))
     outputs.reverse()
-    back_weights = Backward_Propogation(inputs, outputs, N, width)
+
+    back_weights = backward_prop.Backward_Propogation(inputs, outputs, N, width)
     print(back_weights)
 
     #call backward_prop - input is alphabet of strings; return weights (encode) 
