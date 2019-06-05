@@ -1,12 +1,12 @@
 import forward_prop
 import backward_prop
 import tensorflow as tf
-
+import operator
 
 def main():
 
-    input = "abcdefghijklmnop" #input string - can be anything for encoding
-    N = 26  # Number of data
+    characters = "abcdefghijklmnopqrstuvwxyz" #input string - can be anything for encoding
+    N = len(characters)  # Number of data
     width = 5  # Data width
     inputs = []
     for i in range(N):
@@ -23,10 +23,30 @@ def main():
         outputs.append(i / float(N))
     outputs.reverse()
 
+    mapper = forward_prop.Forward_Propagation(inputs, N, width, 0, 0, 1)
+
+    print(mapper)
+
+    print(outputs)
+
+#    [k for k, v in sorted(zip(mapper, inputs), key=operator.itemgetter(1))]
+
+    for i in range(N):
+        min_temp_index = i
+        for j in range(i, N):
+            if(mapper[j] < mapper[min_temp_index]):
+                min_temp_index = j
+        mapper[i], mapper[min_temp_index] = mapper[min_temp_index], mapper[i]
+        outputs[i], outputs[min_temp_index] = outputs[min_temp_index], outputs[i]
+
+    print(mapper)
+
+    print(outputs)
+
     back_weights, labels = backward_prop.Backward_Propagation(inputs, outputs, N, width)
     print(back_weights)
 
-    forward_prop.Forward_Propagation(inputs, N, width, back_weights, labels)
+    forward_prop.Forward_Propagation(inputs, N, width, back_weights, labels, 0)
 
     #call backward_prop - input is alphabet of strings; return weights (encode) 
     #call forward_prop function - returns output (encode)

@@ -3,7 +3,7 @@ import tensorflow as tf
 def Backward_Propagation(inputs, outputs, N, width):
     # Define parameters
     learning_rate = 0.004
-    num_epochs = 3000
+    num_epochs = 5000
 
     # Build the graph
     tf.reset_default_graph()
