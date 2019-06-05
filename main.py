@@ -5,8 +5,8 @@ import operator
 
 def main():
 
-    characters = "abcdefghijklmnopqrstuvwxyz" #input string - can be anything for encoding
-    N = len(characters)  # Number of data
+    alphabet = "abcdefghijklmnopqrstuvwxyz" #input string - can be anything for encoding
+    N = len(alphabet)  # Number of data
     width = 5  # Data width
     inputs = []
     for i in range(N):
@@ -25,9 +25,9 @@ def main():
 
     mapper = forward_prop.Forward_Propagation(inputs, N, width, 0, 0, 1)
 
-    print(mapper)
+#    print(mapper)
 
-    print(outputs)
+#    print(outputs)
 
 #    [k for k, v in sorted(zip(mapper, inputs), key=operator.itemgetter(1))]
 
@@ -39,12 +39,33 @@ def main():
         mapper[i], mapper[min_temp_index] = mapper[min_temp_index], mapper[i]
         outputs[i], outputs[min_temp_index] = outputs[min_temp_index], outputs[i]
 
-    print(mapper)
+#    print(mapper)
 
-    print(outputs)
+#    print(outputs)
 
+    flag = 1
+    while(True):
+        if flag:
+            flag = 0
+            inputs = []
+        if inputs != []:
+            break
+        inputs2 = raw_input("enter string: ")
+        for i in inputs2:
+            temp = []
+            if(alphabet.find(i) == -1):
+                flag = 1
+            else:
+                inputs3 = alphabet.find(i)
+                for j in range(width):
+                    temp.append(inputs3 % 2)
+                    inputs3 = inputs3 / 2
+                temp.reverse()
+                inputs.append(temp)
+    N = len(inputs)
+    print(inputs)
     back_weights, labels = backward_prop.Backward_Propagation(inputs, outputs, N, width)
-    print(back_weights)
+#    print(back_weights)
 
     forward_prop.Forward_Propagation(inputs, N, width, back_weights, labels, 0)
 
