@@ -1,47 +1,53 @@
 import tensorflow as tf
+import numpy as np
 
 def Backward_Propagation(inputs, outputs, N, width):
     # Define parameters
-    learning_rate = 0.004
+    learning_rate = 0.1
     num_epochs = 3000
 
     hl1_neurons = 60;
-    
+
     # Build the graph
     tf.reset_default_graph()
-    X = tf.placeholder(tf.float32, [width])
+    X = tf.placeholder(tf.float32, shape=[None, width])
 
     W1 = tf.Variable(
         tf.random_normal(shape=[width, hl1_neurons],
                         mean=0.5, stddev=1.0/np.sqrt(width), dtype=tf.float32
-                        ),
-        dtype=tf.float32
+                        )
         )
 
     B1 = tf.Variable(
-        tf.zeros(shape=[hl1_neurons], stddev=1/(np.sqrt(width)), dtype=tf.float32)
+        tf.random_normal(shape=[hl1_neurons], 
+                        mean = 0.5, stddev=1.0/np.sqrt(width), dtype=tf.float32
+                        )
         )
 
-    W_out = tf.Variable(
-           tf.random_normal(shape=[width, hl1_neurons],
+    W_out = tf.Variable(    #60 by 5 
+           tf.random_normal(shape=[hl1_neurons, width],
                         mean=0.5, stddev=1.0/np.sqrt(width), dtype=tf.float32
-                        ),
-        dtype=tf.float32
+                        )
         )
 
     B_out = tf.Variable(
-           tf.zeros(shape=[width], stddev=1/(np.sqrt(width)), dtype=tf.float32)
+           tf.random_normal(shape=[width], 
+                        mean = 0.5, stddev=1.0/np.sqrt(width), dtype=tf.float32)
         )
 
 
+    #keep_prob = tf.placeholder(tf.float32)
     # Without activation function
     # Z = tf.reduce_sum(W * A + B)
     # With activation function
-    Z1 = tf.reduce_sum(tf.tanh(W1 * X + B1))
+    #Z1 = tf.reduce_sum(tf.tanh(tf.matmul(X, W1) + B1))
+    Z1 = tf.add(tf.matmul(X,W1), B1)
+    Z1 = tf.nn.relu(Z1)
+    #Z1 = tf.nn.dropout(Z1, keep_prob)
+    #Z2 = tf.reduce_sum(tf.tanh(tf.matmul(Z1, W_out) + B_out))
+    Z2 = tf.nn.softmax(tf.add(tf.matmul(Z1, W_out), B_out))
     
-    Z2 = tf.reduce_sum(tf.tanh(W_out * Z1) + B_out)
-
-    init = tf.global_variables_initializer()
+    initial = tf.global_variables_initializer()
 
     # Loss & Optimizer
     Y = tf.placeholder(dtype=tf.float32)
@@ -51,17 +57,20 @@ def Backward_Propagation(inputs, outputs, N, width):
 
     # Define and run the session
     with tf.Session() as sess:
-        sess.run(init)
+        sess.run(initial)
         for epoch in range(num_epochs):
             total_loss = 0
             print("\nEpoch {}/{}".format(epoch + 1, num_epochs))
             for i in range(N):
+                #i = np.array(inputs[i])[np.newaxis]
+                #np.expand_dims(X, axis=0)
                 _, out, out_loss = sess.run(
                     [optimizer, Z2, loss],
-                    feed_dict={X: inputs[i], Y: outputs[i]}
+                    feed_dict={X: np.array(inputs[i])[np.newaxis], Y: outputs[i]}
                     )
                 total_loss += out_loss
-                print("Entry {}: {:0.4f} (Expected: {:0.4f})".format(i, out, outputs[i]))
+                #print("Entry: %s" % out)
+                #print("Entry {}: {:0.4f} (Expected: {:0.4f})".format(i, out, outputs[i]))
         #      print(out)
         #      print(outputs[i])
             weight_hidden = sess.run(W1)
@@ -74,5 +83,5 @@ def Backward_Propagation(inputs, outputs, N, width):
         print(weight_out)
         print(labels_out)
 
-    return weights, labels
+    return weight_out, labels_out
 

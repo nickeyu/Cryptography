@@ -1,7 +1,9 @@
 import forward_prop
 import backward_prop
+import backward_prop_hidden
 import tensorflow as tf
 import operator
+import time
 
 def main():
 
@@ -50,7 +52,8 @@ def main():
             inputs = []
         if inputs != []:
             break
-        inputs2 = raw_input("enter string: ")
+        inputs2 = input("enter string: ")
+        #inputs2 = raw_input("enter string:")
         for i in inputs2:
             temp = []
             if(alphabet.find(i) == -1):
@@ -64,9 +67,12 @@ def main():
                 inputs.append(temp)
     N = len(inputs)
     print(inputs)
-    back_weights, labels = backward_prop.Backward_Propagation(inputs, outputs, N, width)
-#    print(back_weights)
-
+    start_back = time.time()
+    print("Starting backward prop")
+    back_weights, labels = backward_prop_hidden.Backward_Propagation(inputs, outputs, N, width)
+#     print(back_weights)
+    end_back = time.time()
+    print("Elapsed time: ", end_back - start_back)
     forward_prop.Forward_Propagation(inputs, N, width, back_weights, labels, 0)
 
     #call backward_prop - input is alphabet of strings; return weights (encode) 
