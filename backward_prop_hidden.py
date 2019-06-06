@@ -3,7 +3,7 @@ import numpy as np
 
 def Backward_Propagation(inputs, outputs, N, width):
     # Define parameters
-    learning_rate = 0.004
+    learning_rate = 0.1
     num_epochs = 3000
 
     hl1_neurons = 60;
@@ -83,5 +83,5 @@ def Backward_Propagation(inputs, outputs, N, width):
         print(weight_out)
         print(labels_out)
 
-    return weights_out, labels_out
+    return weight_out, labels_out
 
