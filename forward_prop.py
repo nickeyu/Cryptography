@@ -33,7 +33,7 @@ def Forward_Propagation(inputs, N, width, W, B, random_mapping):
     sess.run(init)
     for i in range(N):
       out = sess.run(Z, feed_dict={X: inputs[i]})
-      print("Entry {}: {:0.4f}".format(i, out))
+      #print("Entry {}: {:0.4f}".format(i, out))
       output.append(out)
  
   return output

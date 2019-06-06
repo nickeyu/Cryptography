@@ -3,7 +3,7 @@ import tensorflow as tf
 def Backward_Propagation(inputs, outputs, N, width):
     # Define parameters
     learning_rate = 0.004
-    num_epochs = 5000
+    num_epochs = 700
 
     # Build the graph
     tf.reset_default_graph()
@@ -38,20 +38,19 @@ def Backward_Propagation(inputs, outputs, N, width):
         sess.run(init)
         for epoch in range(num_epochs):
             total_loss = 0
-            print("\nEpoch {}/{}".format(epoch + 1, num_epochs))
+            #print("\nEpoch {}/{}".format(epoch + 1, num_epochs))
             for i in range(N):
                 _, out, out_loss = sess.run(
                     [optimizer, Z, loss],
                     feed_dict={X: inputs[i], Y: outputs[i]}
                     )
                 total_loss += out_loss
-                print("Entry {}: {:0.4f} (Expected: {:0.4f})".format(i, out, outputs[i]))
+                #print("Entry {}: {:0.4f} (Expected: {:0.4f})".format(i, out, outputs[i]))
         #      print(out)
         #      print(outputs[i])
             weights = sess.run(W)
-            labels = sess.run(B) 
-            print("Total loss: {:0.4f}".format(total_loss))
-        print(labels)
+            biases = sess.run(B) 
+            #print("Total loss: {:0.4f}".format(total_loss))
 
-    return weights, labels
+    return weights, biases
 
