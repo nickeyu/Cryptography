@@ -4,7 +4,7 @@ import numpy as np
 def Backward_Propagation(inputs, outputs, N, width, W_1, B_1, W_2, B_2, prev_weights_bool):
     # Define parameters
     learning_rate = 1
-    num_epochs = 100
+    num_epochs = 3000
 
     hl1_neurons = 26
     total_loss = 0
@@ -56,6 +56,7 @@ def Backward_Propagation(inputs, outputs, N, width, W_1, B_1, W_2, B_2, prev_wei
     #Z2 = tf.reduce_sum(tf.tanh(tf.matmul(Z1, W_out) + B_out))
 #    Z2 = tf.reduce_sum(tf.tanh(Z1 * W_out + B_out))
 #    Z2 = tf.nn.softmax(tf.add(tf.matmul(Z1, W_out), B_out))
+
     Z2 = tf.add(tf.matmul(Z1, W_out), B_out)
     Z2 = tf.sigmoid(Z2)
     
@@ -72,7 +73,8 @@ def Backward_Propagation(inputs, outputs, N, width, W_1, B_1, W_2, B_2, prev_wei
         sess.run(initial)
         for epoch in range(num_epochs):
             total_loss = 0
-            print("\nEpoch {}/{}".format(epoch + 1, num_epochs))
+            if((epoch + 1) % 100 == 0):
+                print("\nEpoch {}/{}".format(epoch + 1, num_epochs))
             for i in range(N):
                 #i = np.array(inputs[i])[np.newaxis]
                 #np.expand_dims(X, axis=0)
@@ -89,11 +91,12 @@ def Backward_Propagation(inputs, outputs, N, width, W_1, B_1, W_2, B_2, prev_wei
             weight_out = sess.run(W_out)
             labels = sess.run(B1) 
             labels_out = sess.run(B_out)
-            print("Total loss: {:0.4f}".format(total_loss))
-        print(weight_hidden)
-        print(labels)
-        print(weight_out)
-        print(labels_out)
+            if((epoch + 1) % 100 == 0):
+                print("Total loss: {:0.4f}".format(total_loss))
+#        print(weight_hidden)
+#        print(labels)
+#        print(weight_out)
+#        print(labels_out)
 
     return weight_hidden, labels, weight_out, labels_out, total_loss
 

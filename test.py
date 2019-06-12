@@ -1,5 +1,6 @@
-import forward_prop
-import backward_prop
+#import forward_prop
+import forward_prop_hidden
+#import backward_prop
 import backward_prop_hidden
 import tensorflow as tf
 import operator
@@ -99,11 +100,11 @@ def main():
   inputs_decode, outputs_decode = flip_mapping(inputs_encode, outputs_encode, dec_to_vect, bin_to_dec)  
 
   encode_weights_hidden, encode_biases_hidden, encode_weights, encode_biases, encode_loss = backward_prop_hidden.Backward_Propagation(inputs_encode, outputs_encode, N, width, 0, 0, 0, 0, 0)
-  while(encode_loss > 0.001):
+  while(encode_loss > 0.005):
     encode_weights_hidden, encode_biases_hidden, encode_weights, encode_biases, encode_loss = backward_prop_hidden.Backward_Propagation(inputs_encode, outputs_encode, N, width, encode_weights_hidden, encode_biases_hidden, encode_weights, encode_biases, 1)
 
   decode_weights_hidden, decode_biases_hidden, decode_weights, decode_biases, decode_loss = backward_prop_hidden.Backward_Propagation(inputs_decode, outputs_decode, N, width, 0, 0, 0, 0, 0)
-  while(decode_loss > 0.001):
+  while(decode_loss > 0.005):
     decode_weights_hidden, decode_biases_hidden, decode_weights, decode_biases, decode_loss = backward_prop_hidden.Backward_Propagation(inputs_decode, outputs_decode, N, width, decode_weights_hidden, decode_biases_hidden, decode_weights, decode_biases, 1)
 
   print('\n')
@@ -116,14 +117,14 @@ def main():
       user_input = input("Enter a message to encode.\n")
       print()
       user_input_vectors = message_to_matrix(user_input)
-      encode_predictions = forward_prop.Forward_Propagation(user_input_vectors, len(user_input_vectors), width, encode_weights, encode_biases, 0)
+      encode_predictions = forward_prop_hidden.Forward_Propagation(user_input_vectors, len(user_input_vectors), width, encode_weights_hidden, encode_biases_hidden, encode_weights, encode_biases, 0)
       translate_message(encode_predictions, outputs_encode)
     elif (option == '2'):
       #user_input = raw_input("Enter message to decode.\n")
       user_input = input("Enter a message to decode.\n")
       print()
       user_input_vectors = message_to_matrix(user_input)
-      decode_predictions = forward_prop.Forward_Propagation(user_input_vectors, len(user_input_vectors), width, decode_weights, decode_biases, 0)
+      decode_predictions = forward_prop_hidden.Forward_Propagation(user_input_vectors, len(user_input_vectors), width, decode_weights_hidden, decode_biases_hidden, decode_weights, decode_biases, 0)
       translate_message(decode_predictions, outputs_decode)
     print_options()
     #option = raw_input()
