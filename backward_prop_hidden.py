@@ -1,39 +1,46 @@
 import tensorflow as tf
 import numpy as np
 
-def Backward_Propagation(inputs, outputs, N, width):
+def Backward_Propagation(inputs, outputs, N, width, W_1, B_1, W_2, B_2, prev_weights_bool):
     # Define parameters
-    learning_rate = 0.1
-    num_epochs = 3000
+    learning_rate = 1
+    num_epochs = 100
 
-    hl1_neurons = 60;
+    hl1_neurons = 26
+    total_loss = 0
 
     # Build the graph
     tf.reset_default_graph()
     X = tf.placeholder(tf.float32, shape=[None, width])
 
-    W1 = tf.Variable(
-        tf.random_normal(shape=[width, hl1_neurons],
-                        mean=0.5, stddev=1.0/np.sqrt(width), dtype=tf.float32
-                        )
-        )
+    W1 = tf.Variable(W_1)
+    B1 = tf.Variable(B_1)
+    W_out = tf.Variable(W_2)
+    B_out = tf.Variable(B_2)
 
-    B1 = tf.Variable(
-        tf.random_normal(shape=[hl1_neurons], 
-                        mean = 0.5, stddev=1.0/np.sqrt(width), dtype=tf.float32
-                        )
-        )
+    if(prev_weights_bool == 0):
+        W1 = tf.Variable(
+            tf.random_normal(shape=[width, hl1_neurons],
+                            mean=0, stddev=1.0, dtype=tf.float32
+                            )
+            )
 
-    W_out = tf.Variable(    #60 by 5 
-           tf.random_normal(shape=[hl1_neurons, width],
-                        mean=0.5, stddev=1.0/np.sqrt(width), dtype=tf.float32
-                        )
-        )
+        B1 = tf.Variable(
+            tf.random_normal(shape=[hl1_neurons], 
+                            dtype=tf.float32
+                            )
+            )
 
-    B_out = tf.Variable(
-           tf.random_normal(shape=[width], 
-                        mean = 0.5, stddev=1.0/np.sqrt(width), dtype=tf.float32)
-        )
+        W_out = tf.Variable(    #60 by 5 
+               tf.random_normal(shape=[hl1_neurons, width],
+                            mean=0, stddev=1.0, dtype=tf.float32
+                            )
+            )
+
+        B_out = tf.Variable(
+               tf.random_normal(shape=[width], 
+                            dtype=tf.float32)
+            )
 
 
     #keep_prob = tf.placeholder(tf.float32)
@@ -42,10 +49,15 @@ def Backward_Propagation(inputs, outputs, N, width):
     # With activation function
     #Z1 = tf.reduce_sum(tf.tanh(tf.matmul(X, W1) + B1))
     Z1 = tf.add(tf.matmul(X,W1), B1)
-    Z1 = tf.nn.relu(Z1)
+#    Z1 = tf.nn.relu(Z1)
+    Z1 = tf.sigmoid(Z1)
+#    Z1 = tf.reduce_sum(tf.tanh(tf.add(tf.matmul(X,W1), B1)))
     #Z1 = tf.nn.dropout(Z1, keep_prob)
     #Z2 = tf.reduce_sum(tf.tanh(tf.matmul(Z1, W_out) + B_out))
-    Z2 = tf.nn.softmax(tf.add(tf.matmul(Z1, W_out), B_out))
+#    Z2 = tf.reduce_sum(tf.tanh(Z1 * W_out + B_out))
+#    Z2 = tf.nn.softmax(tf.add(tf.matmul(Z1, W_out), B_out))
+    Z2 = tf.add(tf.matmul(Z1, W_out), B_out)
+    Z2 = tf.sigmoid(Z2)
     
     initial = tf.global_variables_initializer()
 
@@ -83,5 +95,5 @@ def Backward_Propagation(inputs, outputs, N, width):
         print(weight_out)
         print(labels_out)
 
-    return weight_out, labels_out
+    return weight_hidden, labels, weight_out, labels_out, total_loss
 

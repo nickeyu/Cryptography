@@ -1,5 +1,6 @@
 import forward_prop
 import backward_prop
+import backward_prop_hidden
 import tensorflow as tf
 import operator
 import numpy as np
@@ -11,7 +12,7 @@ import os
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 N = 95  # Number of data
-width = 7  # Data width
+width = 7#N  # Data width
 
 
 def print_mapping(input_array):
@@ -43,6 +44,8 @@ def generate_input_output():
   inputs = []
   outputs = []
   temp = []
+#  for i in range(width):
+#    temp.append(0)
   for i in range(N):
     outputs.append(float(i + 1) / float(N))
     binary = '{0:b}'.format(i)
@@ -52,6 +55,7 @@ def generate_input_output():
       else:
         temp.append(int(binary[-(width - j)]))
     inputs.append(temp)
+#    inputs[i][i] = 1
     temp = []
   return (inputs, outputs)
 
@@ -94,8 +98,13 @@ def main():
   inputs_encode.reverse()
   inputs_decode, outputs_decode = flip_mapping(inputs_encode, outputs_encode, dec_to_vect, bin_to_dec)  
 
-  encode_weights, encode_biases = backward_prop.Backward_Propagation(inputs_encode, outputs_encode, N, width)
-  decode_weights, decode_biases = backward_prop.Backward_Propagation(inputs_decode, outputs_decode, N, width)  
+  encode_weights_hidden, encode_biases_hidden, encode_weights, encode_biases, encode_loss = backward_prop_hidden.Backward_Propagation(inputs_encode, outputs_encode, N, width, 0, 0, 0, 0, 0)
+  while(encode_loss > 0.001):
+    encode_weights_hidden, encode_biases_hidden, encode_weights, encode_biases, encode_loss = backward_prop_hidden.Backward_Propagation(inputs_encode, outputs_encode, N, width, encode_weights_hidden, encode_biases_hidden, encode_weights, encode_biases, 1)
+
+  decode_weights_hidden, decode_biases_hidden, decode_weights, decode_biases, decode_loss = backward_prop_hidden.Backward_Propagation(inputs_decode, outputs_decode, N, width, 0, 0, 0, 0, 0)
+  while(decode_loss > 0.001):
+    decode_weights_hidden, decode_biases_hidden, decode_weights, decode_biases, decode_loss = backward_prop_hidden.Backward_Propagation(inputs_decode, outputs_decode, N, width, decode_weights_hidden, decode_biases_hidden, decode_weights, decode_biases, 1)
 
   print('\n')
   print_options()
