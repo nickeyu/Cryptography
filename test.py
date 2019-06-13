@@ -74,10 +74,13 @@ def print_options():
   print("Option 2: Decode a string\n")
 
 def translate_message(message_list, output_list):
+#  print(message_list)
+#  print(output_list)
+  print(message_list[0][0][0])
   message = ""
   for i in range(len(message_list)):
     for j in range(len(output_list)):
-      if ( abs(message_list[i] - output_list[j]) <= 0.001):
+      if ( abs(message_list[i][0][0] - output_list[j]) <= 0.001):
         message += chr(j + 32)
   print("\nTranslated message: " + message + '\n')
 

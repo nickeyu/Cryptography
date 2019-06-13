@@ -4,7 +4,7 @@ import numpy as np
 def Backward_Propagation(inputs, outputs, N, width, W_1, B_1, W_2, B_2, prev_weights_bool):
     # Define parameters
     learning_rate = 1
-    num_epochs = 3000
+    num_epochs = 100
 
     hl1_neurons = 26
     total_loss = 0
@@ -32,13 +32,13 @@ def Backward_Propagation(inputs, outputs, N, width, W_1, B_1, W_2, B_2, prev_wei
             )
 
         W_out = tf.Variable(    #60 by 5 
-               tf.random_normal(shape=[hl1_neurons, width],
+               tf.random_normal(shape=[hl1_neurons, 1],
                             mean=0, stddev=1.0, dtype=tf.float32
                             )
             )
 
         B_out = tf.Variable(
-               tf.random_normal(shape=[width], 
+               tf.random_normal(shape=[1], 
                             dtype=tf.float32)
             )
 
