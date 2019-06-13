@@ -76,11 +76,11 @@ def print_options():
 def translate_message(message_list, output_list):
 #  print(message_list)
 #  print(output_list)
-  print(message_list[0][0][0])
+#  print(message_list[0][0][0])
   message = ""
   for i in range(len(message_list)):
     for j in range(len(output_list)):
-      if ( abs(message_list[i][0][0] - output_list[j]) <= 0.001):
+      if ( abs(message_list[i][0][0] - output_list[j]) <= 0.005):
         message += chr(j + 32)
   print("\nTranslated message: " + message + '\n')
 
@@ -103,11 +103,11 @@ def main():
   inputs_decode, outputs_decode = flip_mapping(inputs_encode, outputs_encode, dec_to_vect, bin_to_dec)  
 
   encode_weights_hidden, encode_biases_hidden, encode_weights, encode_biases, encode_loss = backward_prop_hidden.Backward_Propagation(inputs_encode, outputs_encode, N, width, 0, 0, 0, 0, 0)
-  while(encode_loss > 0.005):
+  while(encode_loss > 0.001):
     encode_weights_hidden, encode_biases_hidden, encode_weights, encode_biases, encode_loss = backward_prop_hidden.Backward_Propagation(inputs_encode, outputs_encode, N, width, encode_weights_hidden, encode_biases_hidden, encode_weights, encode_biases, 1)
 
   decode_weights_hidden, decode_biases_hidden, decode_weights, decode_biases, decode_loss = backward_prop_hidden.Backward_Propagation(inputs_decode, outputs_decode, N, width, 0, 0, 0, 0, 0)
-  while(decode_loss > 0.005):
+  while(decode_loss > 0.001):
     decode_weights_hidden, decode_biases_hidden, decode_weights, decode_biases, decode_loss = backward_prop_hidden.Backward_Propagation(inputs_decode, outputs_decode, N, width, decode_weights_hidden, decode_biases_hidden, decode_weights, decode_biases, 1)
 
   print('\n')
